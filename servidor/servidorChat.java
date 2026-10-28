@@ -19,7 +19,7 @@ public class servidorChat {
     private static final Set<ClienteHandler> CLIENTES =
             ConcurrentHashMap.newKeySet();
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         System.out.println("Iniciando o servidor ...");
 
         try (ServerSocket servidor = new ServerSocket((PORTA))){
@@ -102,6 +102,14 @@ public class servidorChat {
                 System.out.println("Conexão com cliente encerrada");
 
             }finally {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    System.err.println(
+                            "Erro ao fechar conexão do cliente: " + e.getMessage()
+                    );
+                }
+
                 if (CLIENTES.remove(this) && nome != null) {
                     transmitir("<<<" + nome + "saiu do chat");
 
